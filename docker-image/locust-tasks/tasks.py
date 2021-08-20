@@ -15,7 +15,7 @@ class MetricsLocust(HttpUser):
     #     self._deviceid = str(uuid.uuid4())
 
     @task(1)
-    def login(self):
+    def test(self):
         try:
             tic = time.time();
             # Get the record from the TEST collection now
@@ -28,9 +28,3 @@ class MetricsLocust(HttpUser):
             print(f'DB-CONNECTION-PROBLEM: '
                   f'{str(e)}')
             connect_problem = True
-
-    # @task(999)
-    # def post_metrics(self):
-    #     self.environment.events.request_success.fire(request_type="pymongo", name="post_metrics", response_time=0, response_length=0)
-        # self.client.post(
-        #     "/metrics", {"deviceid": self._deviceid, "timestamp": datetime.now()})
