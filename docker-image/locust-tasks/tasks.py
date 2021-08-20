@@ -1,40 +1,36 @@
 #!/usr/bin/env python
 
-# Copyright 2015 Google Inc. All rights reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-import uuid
+import pymongo
+from bson import json_util
+from bson.json_util import loads
+from bson import ObjectId
+from locust import HttpUser, task, constant, tag
 import time
 
-from datetime import datetime
-from locust import HttpUser, task
-
-
 class MetricsLocust(HttpUser):
-    _deviceid = None
+    client = pymongo.MongoClient("mongodb+srv://<user>:<pwd>@demo.nndb3.mongodb.net/myFirstDatabase?retryWrites=true&w=majority&readPreference=secondary")
+    coll = client.sample_airbnb.listingsAndReviews
 
-    def on_start(self):
-        self._deviceid = str(uuid.uuid4())
+    # def on_start(self):
+    #     self._deviceid = str(uuid.uuid4())
 
     @task(1)
     def login(self):
-        # self.client.post(
-        #    '/login', {"deviceid": self._deviceid})
-        self.environment.events.request_success.fire(request_type="pymongo", name="login", response_time=0, response_length=0)
+        try:
+            tic = time.time();
+            # Get the record from the TEST collection now
+            doc = self.coll.find_one({})
+            self.environment.events.request_success.fire(request_type="pymongo", name="singleFetch", response_time=(time.time()-tic), response_length=0)
+        except KeyboardInterrupt:
+            print
+            sys.exit(0)
+        except Exception as e:
+            print(f'DB-CONNECTION-PROBLEM: '
+                  f'{str(e)}')
+            connect_problem = True
 
-    @task(999)
-    def post_metrics(self):
-        self.environment.events.request_success.fire(request_type="pymongo", name="post_metrics", response_time=0, response_length=0)
+    # @task(999)
+    # def post_metrics(self):
+    #     self.environment.events.request_success.fire(request_type="pymongo", name="post_metrics", response_time=0, response_length=0)
         # self.client.post(
         #     "/metrics", {"deviceid": self._deviceid, "timestamp": datetime.now()})
