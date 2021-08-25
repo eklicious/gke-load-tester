@@ -16,14 +16,12 @@ Define environment variables for the project id, region and zone you want to use
     $ REGION=us-central1
     $ ZONE=${REGION}-b
     $ CLUSTER=gke-load-test
-    $ TARGET=${PROJECT}.appspot.com
     $ gcloud config set compute/region $REGION 
     $ gcloud config set compute/zone $ZONE
 
 **Note:** Following services should be enabled in your project:
 Cloud Build
 Kubernetes Engine
-Google App Engine Admin API 
 Cloud Storage
 
     $ gcloud services enable \
@@ -91,28 +89,25 @@ After the Locust workers are deployed, you can return to the Locust master web i
         $ pushd gke-load-test
         $ gcloud builds submit --tag gcr.io/$PROJECT/locust-tasks:latest docker-image/.
 
-4. Deploy sample application on GAE
 
-        $ gcloud app deploy sample-webapp/app.yaml --project=$PROJECT
-
-5. Replace [TARGET_HOST] and [PROJECT_ID] in locust-master-controller.yaml and locust-worker-controller.yaml with the deployed endpoint and project-id respectively. 
+4. Replace [TARGET_HOST] and [PROJECT_ID] in locust-master-controller.yaml and locust-worker-controller.yaml with the deployed endpoint and project-id respectively. 
 
         $ sed -i -e "s/\[TARGET_HOST\]/$TARGET/g" kubernetes-config/locust-master-controller.yaml
         $ sed -i -e "s/\[TARGET_HOST\]/$TARGET/g" kubernetes-config/locust-worker-controller.yaml
         $ sed -i -e "s/\[PROJECT_ID\]/$PROJECT/g" kubernetes-config/locust-master-controller.yaml
         $ sed -i -e "s/\[PROJECT_ID\]/$PROJECT/g" kubernetes-config/locust-worker-controller.yaml
 
-6. Deploy Locust master and worker nodes:
+5. Deploy Locust master and worker nodes:
 
         $ kubectl apply -f kubernetes-config/locust-master-controller.yaml
         $ kubectl apply -f kubernetes-config/locust-master-service.yaml
         $ kubectl apply -f kubernetes-config/locust-worker-controller.yaml
 
-7. Get the external ip of Locust master service 
+6. Get the external ip of Locust master service 
 
         $ EXTERNAL_IP=$(kubectl get svc locust-master -o yaml | grep ip | awk -F":" '{print $NF}')
 
-8. Starting load testing
+7. Starting load testing
 The Locust master web interface enables you to execute the load testing tasks against the system under test, as shown in the following image. Access the url as http://$EXTERNAL_IP:8089.
 
 To begin, specify the total number of users to simulate and a rate at which each user should be spawned. Next, click Start swarming to begin the simulation. To stop the simulation, click **Stop** and the test will terminate. The complete results can be downloaded into a spreadsheet. 
