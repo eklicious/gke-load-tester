@@ -69,7 +69,7 @@ After the Locust workers are deployed, you can return to the Locust master web i
 
 ## Setup
 
-1. Create GKE cluster
+1. Create GKE cluster. Note that the max-nodes is set to 10. For extreme tests with lots of pods, you will need to set the max-nodes value higher.
 
         $ gcloud container clusters create $CLUSTER \
                 --zone $ZONE \
@@ -82,7 +82,6 @@ After the Locust workers are deployed, you can return to the Locust master web i
         $ gcloud container clusters get-credentials $CLUSTER \
         --zone $ZONE \
         --project $PROJECT
-You might have to increase max-nodes if you want to achieve massive scale.
 
 2. Clone tutorial repo in a local directory on your cloud shell environment
 
