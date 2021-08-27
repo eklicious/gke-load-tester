@@ -1,5 +1,8 @@
 ## Distribute Load Testing Using GKE
 
+The original online instructions can be found here: https://cloud.google.com/architecture/distributed-load-testing-using-gke
+It has diagrams and is more suited for copying/pasting etc. But PLEASE follow along this README too as steps have been optimized from much testing.
+
 ## Introduction
 
 Load testing is key to the development of any backend infrastructure because load tests demonstrate how well the system functions when faced with real-world demands. An important aspect of load testing is the proper simulation of user and device behavior to identify and understand any possible system bottlenecks, well in advance of deploying applications to production.
@@ -14,6 +17,8 @@ The following document is loosely based on a GCP lab: https://cloud.google.com/a
 Open Cloud Shell to execute the commands listed in this tutorial.
 
 Define environment variables for the project id, region and zone you want to use for this tutorial.
+
+TODO: Specify the region you want your GKE cluster deployed to, e.g. us-east1
 
     $ PROJECT=$(gcloud config get-value project)
     $ REGION=us-central1
@@ -69,11 +74,16 @@ After the Locust workers are deployed, you can return to the Locust master web i
 
 ## Setup
 
-1. Create GKE cluster. Note that the max-nodes is set to 10. For extreme tests with lots of pods, you will need to set the max-nodes value higher.
+1. Create GKE cluster.
+
+TODO:
+     1) set the max nodes accordingly. If you are testing, it can be low. If you are doing a large scale test, bump it up.
+     2) set the machine type correctly too. Having more CPU's/node is recommended since it means less nodes to manage. But, be mindful of costs...
 
         $ gcloud container clusters create $CLUSTER \
                 --zone $ZONE \
                 --scopes "https://www.googleapis.com/auth/cloud-platform" \
+                --machine-type "c2-standard-4" \
                 --num-nodes "1" \
                 --enable-autoscaling --min-nodes "1" \
                 --max-nodes "10" \
@@ -122,11 +132,21 @@ client = pymongo.MongoClient("mongodb+srv://<user>:<pwd>@demo.nndb3.mongodb.net/
         $ EXTERNAL_IP=$(kubectl get svc locust-master -o yaml | grep ip | awk -F":" '{print $NF}')
 
 8. Starting load testing
+
+TODO: Figure out how many users each Locust worker can manage, e.g. 1000 simulated users/worker. At a certain point, the performance degrades because the pods don't have enough CPU to manager more than the simulated worker threshold.
+
 The Locust master web interface enables you to execute the load testing tasks against the system under test, as shown in the following image. Access the url as http://$EXTERNAL_IP:8089.
 
 To begin, specify the total number of users to simulate and a rate at which each user should be spawned. Next, click Start swarming to begin the simulation. To stop the simulation, click **Stop** and the test will terminate. The complete results can be downloaded into a spreadsheet. 
 
 9. [Optional] Scaling clients
+
+TODO: After you are done testing and are ready for the full scale test, make sure your GKE cluster node pool has enough node capacity and start to scale up the number of worker pods using the following command. Since each worker has been optimized to use 1 CPU, you should only scale out the workers to be total # of CPU's available in your pool - 1 (for the Locust master).
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Important note!!! Locust can scale workers up but is not good at scaling workers down. The master will think there are more worker nodes than there really are. The best practice is to scale both the master and workers to 0 replicas, then scale the master to 1 and the workers to n. This way you get a clean slate.
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 Scaling up the number of simulated users will require an increase in the number of Locust worker pods. To increase the number of pods deployed by the deployment, Kubernetes offers the ability to resize deployments without redeploying them. For example, the following command scales the pool of Locust worker pods to 20:
 
         $ kubectl scale deployment/locust-worker --replicas=20
@@ -140,15 +160,15 @@ kubectl get pods -o wide
 
 To view logs:
 ```
-kubectl logs <podName>
+kubectl logs <pod name>
+```
+
+To ssh into a given pod for extreme troubleshooting:
+```
+kubectl exec -ti <pod name> -- /bin/sh
 ```
 
 ## Cleaning up
+The easiest way to clean up is to delete your GCP project. Search for "manage resources" and then check the project and hit delete.
 
     $ gcloud container clusters delete $CLUSTER --zone $ZONE
-
-## License
-
-This code is Apache 2.0 licensed and more information can be found in `LICENSE`. For information on licenses for third party software and libraries, refer to the `docker-image/licenses` directory.
-
-
