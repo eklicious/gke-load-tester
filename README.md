@@ -17,12 +17,14 @@ Define environment variables for the project id, region and zone you want to use
 
 **TODO: Specify the region you want your GKE cluster deployed to, e.g. us-east1**
 
+```
 PROJECT=$(gcloud config get-value project)
 REGION=us-central1
 ZONE=${REGION}-b
 CLUSTER=gke-load-test
 gcloud config set compute/region $REGION 
 gcloud config set compute/zone $ZONE
+```
 
 Note: Following services should be enabled in your project:
 Cloud Build
