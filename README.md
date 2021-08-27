@@ -31,12 +31,14 @@ Cloud Build
 Kubernetes Engine
 Cloud Storage
 
+```
 gcloud services enable \
    cloudbuild.googleapis.com \
    compute.googleapis.com \
    container.googleapis.com \
    containeranalysis.googleapis.com \
    containerregistry.googleapis.com 
+```
 
 ## Load testing tasks
 
@@ -79,6 +81,7 @@ After the Locust workers are deployed, you can return to the Locust master web i
      1) Set the machine type to a valid compute optimized type. Having more CPU's/node is recommended since it means less nodes to manage. But, be mindful of costs...
      2) Set the max nodes accordingly. If you are testing, it can be low, e.g. 1. If you are doing a large scale test, you can estimate the number of nodes needed based on Total # of Requests Per Second Required / (# of CPU's for the given machine type * 1000)**
 
+```
 gcloud container clusters create $CLUSTER \
      --zone $ZONE \
      --scopes "https://www.googleapis.com/auth/cloud-platform" \
@@ -87,14 +90,19 @@ gcloud container clusters create $CLUSTER \
      --enable-autoscaling --min-nodes "1" \
      --max-nodes "10" \
      --addons HorizontalPodAutoscaling,HttpLoadBalancing
+```
 
+```
 gcloud container clusters get-credentials $CLUSTER \
      --zone $ZONE \
      --project $PROJECT
+```
 
 2. Clone tutorial repo in a local directory on your cloud shell environment
 
+```
 git clone <this-repository>
+```
 
 3. Modify the Locust tasks.py file to use your MongoDB connection string. This file is where you configure what the load test actually "does." When you run the load test, it will execute this file.
 
@@ -109,26 +117,33 @@ client = pymongo.MongoClient("mongodb+srv://<user>:<pwd>@demo.nndb3.mongodb.net/
 
 4. Build docker image and store it in your project's container registry
 
+```
 cd gke-load-tester
 gcloud builds submit --tag gcr.io/$PROJECT/locust-tasks:latest docker-image/.
-
+```
 
 5. Replace [TARGET_HOST] and [PROJECT_ID] in locust-master-controller.yaml and locust-worker-controller.yaml with the deployed endpoint and project-id respectively. Note that the TARGET_HOST is irrelevant since Locust by default was designed to test against web applications.
 
+```
 sed -i -e "s/\[TARGET_HOST\]/$TARGET/g" kubernetes-config/locust-master-controller.yaml
 sed -i -e "s/\[TARGET_HOST\]/$TARGET/g" kubernetes-config/locust-worker-controller.yaml
 sed -i -e "s/\[PROJECT_ID\]/$PROJECT/g" kubernetes-config/locust-master-controller.yaml
 sed -i -e "s/\[PROJECT_ID\]/$PROJECT/g" kubernetes-config/locust-worker-controller.yaml
+```
 
 6. Deploy Locust master and worker nodes:
 
+```
 kubectl apply -f kubernetes-config/locust-master-controller.yaml
 kubectl apply -f kubernetes-config/locust-master-service.yaml
 kubectl apply -f kubernetes-config/locust-worker-controller.yaml
+```
 
 7. Get the external ip of Locust master service so we can access the Locust web interface
 
+```
 EXTERNAL_IP=$(kubectl get svc locust-master -o yaml | grep ip | awk -F":" '{print $NF}')
+```
 
 8. Starting load testing
 
@@ -148,12 +163,16 @@ Important note!!! Locust can scale workers up but is not good at scaling workers
 
 Scaling up the number of simulated users will require an increase in the number of Locust worker pods. To increase the number of pods deployed by the deployment, Kubernetes offers the ability to resize deployments without redeploying them. For example, the following command scales the pool of Locust worker pods to 20:
 
+```
 kubectl scale deployment/locust-worker --replicas=20
+```
 
 Below is an example of scaling the master and worker pods down to 0 so you can start your cluster out with a clean slate. This is good when you want to redeploy new code and/or k8s configurations.
     
+```
 kubectl scale deployment/locust-master --replicas=0
 kubectl scale deployment/locust-worker --replicas=0
+```
 
 If there are any issues with your deployment, the following commands are helpful:
 
@@ -175,4 +194,6 @@ kubectl exec -ti <pod name> -- /bin/sh
 ## Cleaning up
 The easiest way to clean up is to delete your GCP project. Search for "manage resources" and then check the project and hit delete.
 
+```
 gcloud container clusters delete $CLUSTER --zone $ZONE
+```
