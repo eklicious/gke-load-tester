@@ -15,7 +15,7 @@ Open Cloud Shell to execute the commands listed in this tutorial.
 
 Define environment variables for the project id, region and zone you want to use for this tutorial.
 
-TODO: Specify the region you want your GKE cluster deployed to, e.g. us-east1
+**TODO: Specify the region you want your GKE cluster deployed to, e.g. us-east1**
 
     $ PROJECT=$(gcloud config get-value project)
     $ REGION=us-central1
@@ -73,9 +73,9 @@ After the Locust workers are deployed, you can return to the Locust master web i
 
 1. Create GKE cluster.
 
-TODO:
+**TODO:
      1) set the max nodes accordingly. If you are testing, it can be low. If you are doing a large scale test, bump it up.
-     2) set the machine type correctly too. Having more CPU's/node is recommended since it means less nodes to manage. But, be mindful of costs...
+     2) set the machine type correctly too. Having more CPU's/node is recommended since it means less nodes to manage. But, be mindful of costs...**
 
         $ gcloud container clusters create $CLUSTER \
                 --zone $ZONE \
@@ -130,7 +130,7 @@ client = pymongo.MongoClient("mongodb+srv://<user>:<pwd>@demo.nndb3.mongodb.net/
 
 8. Starting load testing
 
-TODO: Figure out how many users each Locust worker can manage, e.g. 1000 simulated users/worker. At a certain point, the performance degrades because the pods don't have enough CPU to manager more than the simulated worker threshold.
+**TODO: Figure out how many users each Locust worker can manage, e.g. 1000 simulated users/worker. At a certain point, the performance degrades because the pods don't have enough CPU to manager more than the simulated worker threshold.**
 
 The Locust master web interface enables you to execute the load testing tasks against the system under test, as shown in the following image. Access the url as http://$EXTERNAL_IP:8089.
 
@@ -138,11 +138,11 @@ To begin, specify the total number of users to simulate and a rate at which each
 
 9. [Optional] Scaling clients
 
-TODO: After you are done testing and are ready for the full scale test, make sure your GKE cluster node pool has enough node capacity and start to scale up the number of worker pods using the following command. Since each worker has been optimized to use 1 CPU, you should only scale out the workers to be total # of CPU's available in your pool - 1 (for the Locust master).
+**TODO: After you are done testing and are ready for the full scale test, make sure your GKE cluster node pool has enough node capacity and start to scale up the number of worker pods using the following command. Since each worker has been optimized to use 1 CPU, you should only scale out the workers to be total # of CPU's available in your pool - 1 (for the Locust master).
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 Important note!!! Locust can scale workers up but is not good at scaling workers down. The master will think there are more worker nodes than there really are. The best practice is to scale both the master and workers to 0 replicas, then scale the master to 1 and the workers to n. This way you get a clean slate.
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!**
 
 Scaling up the number of simulated users will require an increase in the number of Locust worker pods. To increase the number of pods deployed by the deployment, Kubernetes offers the ability to resize deployments without redeploying them. For example, the following command scales the pool of Locust worker pods to 20:
 
