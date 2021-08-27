@@ -25,7 +25,7 @@ spec:
             limits:
               cpu: "0.94"
             requests:
-              cpu: "0.5"
+              cpu: "0.75"
           env:
             - name: LOCUST_MODE
               value: worker
