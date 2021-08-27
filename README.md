@@ -155,13 +155,9 @@ To begin, specify the total number of users to simulate and a rate at which each
     
 9. [Optional] Scaling clients
 
-**TODO: After you are done testing and are ready for the full scale test, make sure your GKE cluster node pool has enough node capacity and start to scale up the number of worker pods using the following command. Since each worker has been optimized to use 1 CPU, you should only scale out the workers to be total # of CPU's available in your pool - 1 (for the Locust master).
+**TODO: After you are done testing and are ready for the full scale test, make sure your GKE cluster node pool has enough node capacity and start to scale up the number of worker pods using the following command. Since each worker has been optimized to use 1 CPU, you should only scale out the workers to be total # of CPU's available in your pool - 1 (for the Locust master).**
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-Important note!!! Locust can scale workers up but is not good at scaling workers down. The master will think there are more worker nodes than there really are. The best practice is to scale both the master and workers to 0 replicas, then scale the master to 1 and the workers to n. This way you get a clean slate.
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!**
+**Important note! Locust can scale workers up but is not good at scaling workers down. The master will think there are more worker nodes than there really are. The best practice is to scale both the master and workers to 0 replicas, then scale the master to 1 and the workers to n. This way you get a clean slate.**
 
 Scaling up the number of simulated users will require an increase in the number of Locust worker pods. To increase the number of pods deployed by the deployment, Kubernetes offers the ability to resize deployments without redeploying them. For example, the following command scales the pool of Locust worker pods to 20:
 
