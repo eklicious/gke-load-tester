@@ -12,8 +12,8 @@ from bson import ObjectId
 from locust import User, events, task, constant, tag, between
 import time
 
-# Change the connection string to point to a correct db
-mdbClient = pymongo.MongoClient("mongodb+srv://pentaho:pentaho@winvargo.6ngvd.mongodb.net/myFirstDatabase?retryWrites=true&w=majority&readPreference=secondary")
+# Change the connection string to point to a correct db and double check the readpreference etc.
+mdbClient = pymongo.MongoClient("mongodb+srv://<username>:<password>@<srv>/myFirstDatabase?retryWrites=true&w=majority&readPreference=secondaryPreferred")
 coll = mdbClient.sample_airbnb.listingsAndReviews
 
 class MetricsLocust(User):
