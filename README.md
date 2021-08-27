@@ -1,16 +1,13 @@
 ## Distribute Load Testing Using GKE
 
 The original online instructions can be found here: https://cloud.google.com/architecture/distributed-load-testing-using-gke
-It has diagrams and is more suited for copying/pasting etc. But PLEASE follow along this README too as steps have been optimized from much testing.
+It has diagrams and is more suited for copying/pasting etc. But PLEASE follow along this README too as steps have been optimized from much testing. The major difference is that the google lab uses a sample GAE app to load test, where in this case we will be load testing against MongoDB.
 
 ## Introduction
 
 Load testing is key to the development of any backend infrastructure because load tests demonstrate how well the system functions when faced with real-world demands. An important aspect of load testing is the proper simulation of user and device behavior to identify and understand any possible system bottlenecks, well in advance of deploying applications to production.
 
 However, dedicated test infrastructure can be expensive and difficult to maintain because it is not needed on a continuous basis. Moreover, dedicated test infrastructure is often a one-time capital expense with a fixed capacity, which makes it difficult to scale load testing beyond the initial investment and can limit experimentation. This can lead to slowdowns in productivity for development teams and lead to applications that are not properly tested before production deployments.
-
-The following document is loosely based on a GCP lab: https://cloud.google.com/architecture/distributed-load-testing-using-gke. The major difference is that the google lab uses a sample GAE app to load test, where in this case we will be load testing against MongoDB.
-
 
 ## Before you begin
 
