@@ -122,7 +122,7 @@ cd gke-load-tester
 gcloud builds submit --tag gcr.io/$PROJECT/locust-tasks:latest docker-image/.
 ```
 
-5. Replace [TARGET_HOST] and [PROJECT_ID] in locust-master-controller.yaml and locust-worker-controller.yaml with the deployed endpoint and project-id respectively. Note that the TARGET_HOST is irrelevant since Locust by default was designed to test against web applications.
+5. Note that the following command works for new yaml files with placeholder text. Otherwise, you need to manually make the changes. Replace [TARGET_HOST] and [PROJECT_ID] in locust-master-controller.yaml and locust-worker-controller.yaml with the deployed endpoint and project-id respectively. Note that the TARGET_HOST is irrelevant since Locust by default was designed to test against web applications.
 
 ```
 sed -i -e "s/\[TARGET_HOST\]/$TARGET/g" kubernetes-config/locust-master-controller.yaml
