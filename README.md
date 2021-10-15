@@ -147,7 +147,7 @@ EXTERNAL_IP=$(kubectl get svc locust-master -o yaml | grep ip | awk -F":" '{prin
 
 8. Starting load testing
 
-The Locust master web interface enables you to execute the load testing tasks against the system under test, as shown in the following image. Access the url as http://$EXTERNAL_IP:8089.
+The Locust master web interface enables you to execute the load testing tasks against the system under test, as shown in the following image. echo $EXTERNAL_IP and open a new browser window and go to http://<EXTERNAL_IP>:8089.
     
 To begin, specify the total number of users to simulate and a rate at which each user should be spawned. Next, click Start swarming to begin the simulation. To stop the simulation, click **Stop** and the test will terminate. The complete results can be downloaded into a spreadsheet. 
 
