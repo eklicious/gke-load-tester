@@ -9,7 +9,11 @@ Load testing is key to the development of any backend infrastructure because loa
 
 However, dedicated test infrastructure can be expensive and difficult to maintain because it is not needed on a continuous basis. Moreover, dedicated test infrastructure is often a one-time capital expense with a fixed capacity, which makes it difficult to scale load testing beyond the initial investment and can limit experimentation. This can lead to slowdowns in productivity for development teams and lead to applications that are not properly tested before production deployments.
 
-## Before you begin
+## Way before you begin!
+
+Do all of your development and testing locally on your laptop before pushing codes out to GKE. It takes too long and is sometimes hard troubleshooting issues in GKE because you need to constantly rebuild your containers and debug logs don't always make it to the GKE pod logs.
+
+## Now, let's begin...
 
 Open Cloud Shell to execute the commands listed in this tutorial.
 
