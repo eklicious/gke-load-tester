@@ -26,6 +26,7 @@ Open Cloud Shell to execute the commands listed in this tutorial.
 Define environment variables for the project id, region and zone you want to use for this tutorial.
 
 **TODO: Specify the region you want your GKE cluster deployed to, e.g. us-east1**
+
 **TODO: The default quota for compute optimized VM's is 2. You can either increase the instance size, e.g. c2-standard-30, to get more CPU's to launch more workers for 2 machines or you can increase your quota limit by going to https://cloud.google.com/compute/quotas. Each CPU is equivalent to 1 Locust worker.**
 
 ```
