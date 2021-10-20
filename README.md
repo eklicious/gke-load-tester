@@ -6,7 +6,7 @@ It has diagrams and is more suited for copying/pasting etc. But PLEASE follow al
 ## SA Approach before diving in
 
 1. Test your Locust script locally on your machine to make sure it's working so you do less debugging in GKE.
-2. Run a sniff test in GKE on a single node cluster with just 1 master and 1 worker and figure out how many simulated users a single worker can support. This will dictate how many workers/VMs you need for your final test. You need to make sure the Locust CPU metrics are decent and the RPS don't plateau.
+2. Run a sniff test in GKE on a single node cluster with just 1 master and 1 worker and figure out how many simulated users a single worker can support. This will dictate how many workers/VMs you need for your final test. You need to make sure the Locust CPU metrics are decent and the RPS doesn't plateau.
 3. Run the final load with enough hardware to hit your RPS target.
 
 ## Introduction
