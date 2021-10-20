@@ -3,6 +3,12 @@
 **The original online instructions can be found here: https://cloud.google.com/architecture/distributed-load-testing-using-gke
 It has diagrams and is more suited for copying/pasting etc. But PLEASE follow along this README too as steps have been optimized from much testing. The major difference is that the Google lab uses a sample AppEngine app to load test against (as opposed to testing against MDB) and their Git repo is dated using Locust 0.7 and isn't optimized for higher scale performance.**
 
+## SA Approach before diving in
+
+1. Test your Locust script locally on your machine to make sure it's working so you can do less debugging in GKE.
+2. Run a sniff test in GKE on a single node cluster with just 1 master and 1 worker and figure out how many simulated users a single worker can support. This will dictate how many workers/VMs you need for your final test. You need to make sure the Locust CPU metrics are decent and the RPS don't plateau.
+3. Run the final load with enough hardware to hit your RPS target.
+
 ## Introduction
 
 Load testing is key to the development of any backend infrastructure because load tests demonstrate how well the system functions when faced with real-world demands. An important aspect of load testing is the proper simulation of user and device behavior to identify and understand any possible system bottlenecks, well in advance of deploying applications to production.
@@ -20,6 +26,7 @@ Open Cloud Shell to execute the commands listed in this tutorial.
 Define environment variables for the project id, region and zone you want to use for this tutorial.
 
 **TODO: Specify the region you want your GKE cluster deployed to, e.g. us-east1**
+**TODO: The default quota for compute optimized VM's is 2. You can either increase the instance size, e.g. c2-standard-30, to get more CPU's to launch more workers for 2 machines or you can increase your quota limit by going to https://cloud.google.com/compute/quotas. Each CPU is equivalent to 1 Locust worker.**
 
 ```
 PROJECT=$(gcloud config get-value project)
