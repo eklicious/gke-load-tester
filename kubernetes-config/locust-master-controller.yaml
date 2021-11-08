@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: locust-master
-          image: gcr.io/[PROJECT_ID]/locust-tasks:latest
+          image: gcr.io/[PROJECT_ID]/[CLUSTER_NM]:latest
           resources:
             limits:
               cpu: "0.94"
