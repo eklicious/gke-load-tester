@@ -116,10 +116,10 @@ gcloud container clusters get-credentials $CLUSTER \
 git clone <this-repository>
 ```
 
-3. Modify the Locust tasks.py file to use your MongoDB connection string. This file is where you configure what the load test actually "does." When you run the load test, it will execute this file.
+3. Modify the Locust locustfile.py file to use your MongoDB connection string. This file is where you configure what the load test actually "does." When you run the load test, it will execute this file.
 
 ```
-vi gke-load-tester/docker-image/locust-tasks/tasks.py
+vi gke-load-tester/docker-image/locust-tasks/locustfile.py
 ```
 In vi, modify the line toward the top of the file to reflect your MongoDB connection string, with username and password (python modern connection string). The original like looks like this:
 
